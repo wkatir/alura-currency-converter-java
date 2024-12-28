@@ -17,16 +17,16 @@ public class ExchangeRateApiClient {
         this.apiKey = apiKey;
     }
 
-    public ExchangeRateResponse  getExchangeRates(String baseCurrency) throws IOException, InterruptedException {
+    public ExchangeRateResponse getExchangeRates(String baseCurrency) throws IOException, InterruptedException {
         String url = API_URL + apiKey + "/latest/" + baseCurrency;
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        if(response.statusCode() == 200){
-            ExchangeRateResponse exchangeRateResponse = new Gson().fromJson(response.body(),ExchangeRateResponse.class);
-            if (!"success".equals(exchangeRateResponse.result())){
+        if (response.statusCode() == 200) {
+            ExchangeRateResponse exchangeRateResponse = new Gson().fromJson(response.body(), ExchangeRateResponse.class);
+            if (!"success".equals(exchangeRateResponse.result())) {
                 throw new IOException("API response error: " + exchangeRateResponse.result());
             }
             return exchangeRateResponse;
